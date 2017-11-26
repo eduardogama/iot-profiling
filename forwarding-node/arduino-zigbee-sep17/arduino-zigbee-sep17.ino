@@ -96,20 +96,14 @@ void loop()
   probe = "\0";
   int aux=0;
 
+  Serial.println("entrou loop()");
   if(xbee_s.available()){
-      probe = xbee_s.readString();
-      if(probe != "[FIN,ACK]"){
-        aux=1;
-        Serial.print("xbee_s != 0 : ");
-        Serial.println(probe);
-        xbee_s.print("Starting PL\n");
-      }else{
-        Serial.print("descartando FIN,ACK : ");
-        Serial.println(probe);
-        aux = 0;
-      }
+    probe = xbee_s.readString();
+    aux=1;
+    Serial.println(probe);
+    xbee_s.print("Starting PL\n");
   }
-  
+
   if(aux != 0){
 
     xbee_s.print("+++");
@@ -151,7 +145,7 @@ void loop()
     
     int d = 40;//probe.toInt(); //Delay between packets in ms
     
-    int count = 1000; //msg
+    int count = 10; //msg
     
     // Leitura da umidade
     float hmd = dht.readHumidity();
@@ -163,19 +157,12 @@ void loop()
         return;
     }
     int i,j; 
-    for(i=0; i<4;i++){
-      for(j=0; j<1000;j++){
-        msg += "[";
-        msg += i;
-        msg += ",";
-        msg += j;
-        msg += "]Temperatura: ";
-        msg += tmp;
-        msg += "*C Humidade: ";
-        msg += hmd;
-        msg += "%\n";
-      }
-    }
+    msg += "Temperatura: ";
+    msg += tmp;
+    msg += "*C Humidade: ";
+    msg += hmd;
+    msg += "%\n";
+
     while(count--){
       xbee_s.print(msg); 
       delay(d);
@@ -200,34 +187,8 @@ void loop()
     }
 
     delay(10000);
-    
-    int flag = 1;
-    while(flag > 0){
-      xbee_s.print("[FIN]\n");
-      Serial.print("[FIN]\n");
 
-      int attempt=0;
-
-      delay(1000);
-      while(!xbee_s.available()){
-        attempt++;
-        xbee_s.print("[FIN]\n");
-        Serial.print("Send [FIN]\n");
-        delay(1000);
-        if(attempt > 5){
-          flag--;
-          break;
-        }
-      }
-      probe = xbee_s.readString();
-      if(probe == "[FIN,ACK]"){
-        xbee_s.print("[ACK]\n");
-        flag=0;
-        break;
-      }else{
-        flag--;
-        delay(1000); 
-      }
-    }
+    xbee_s.print("[FIN]\n");
+    Serial.print("[FIN]\n");
   }
 }

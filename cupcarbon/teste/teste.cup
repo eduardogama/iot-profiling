@@ -1,0 +1,18 @@
+CupCarbon v. 3.3.11 (U-One)
+----------------
+name:teste
+zoom:2
+centerposition_la:48.41000214838318
+centerposition_lo:-4.510062038898468
+map:6
+display_details:true
+draw_radio_links:true
+draw_sensor_arrows:true
+radio_links_color:1
+draw_marker_arrows:false
+display_rl_distance:false
+propagation:false
+display_marker_distance:false
+display_radio_messages:true
+draw_script_file_name:true
+display_print_messages:true
